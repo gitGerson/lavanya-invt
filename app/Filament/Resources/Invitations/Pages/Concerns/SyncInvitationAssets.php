@@ -50,7 +50,7 @@ trait SyncInvitationAssets
 
     protected function syncCoupleImage(Invitation $record, array $data): void
     {
-        $path = $data['couple_image'] ?? null;
+        $path = $this->normalizeUploadPath($data['couple_image'] ?? null);
         if (! $path) {
             return;
         }
@@ -83,7 +83,7 @@ trait SyncInvitationAssets
             'instagram_handle' => $data["{$role}_instagram_handle"] ?? null,
         ]);
 
-        $photoPath = $data["{$role}_photo"] ?? null;
+        $photoPath = $this->normalizeUploadPath($data["{$role}_photo"] ?? null);
         if (! $photoPath) {
             return;
         }
@@ -106,7 +106,7 @@ trait SyncInvitationAssets
         }
 
         foreach ($galleryRows as $index => $row) {
-            $path = $row['image'] ?? null;
+            $path = $this->normalizeUploadPath($row['image'] ?? null);
             if (! $path) {
                 continue;
             }
@@ -140,7 +140,7 @@ trait SyncInvitationAssets
         }
 
         foreach ($accountRows as $index => $row) {
-            $path = $row['qr_image'] ?? null;
+            $path = $this->normalizeUploadPath($row['qr_image'] ?? null);
             if (! $path) {
                 continue;
             }
@@ -169,7 +169,7 @@ trait SyncInvitationAssets
 
     protected function syncMusic(Invitation $record, array $data): void
     {
-        $path = $data['music_audio'] ?? null;
+        $path = $this->normalizeUploadPath($data['music_audio'] ?? null);
 
         if (! $path) {
             return;
@@ -197,5 +197,32 @@ trait SyncInvitationAssets
         $record->music()->firstOrCreate([])->update([
             'audio_asset_id' => $asset->id,
         ]);
+    }
+
+    protected function normalizeUploadPath(mixed $value): ?string
+    {
+        if (is_string($value) && $value !== '') {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            if (isset($value['path']) && is_string($value['path'])) {
+                return $value['path'];
+            }
+
+            if (isset($value['file']) && is_string($value['file'])) {
+                return $value['file'];
+            }
+
+            $first = reset($value);
+            if (is_string($first)) {
+                return $first;
+            }
+            if (is_array($first) && isset($first['path']) && is_string($first['path'])) {
+                return $first['path'];
+            }
+        }
+
+        return null;
     }
 }
