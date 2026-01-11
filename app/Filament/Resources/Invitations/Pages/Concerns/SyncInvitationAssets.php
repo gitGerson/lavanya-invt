@@ -118,15 +118,17 @@ trait SyncInvitationAssets
             return;
         }
 
-        foreach ($galleryRows as $index => $row) {
+        $position = 1;
+        foreach ($galleryRows as $row) {
             $path = $this->normalizeUploadPath($row['image'] ?? null);
             if (! $path) {
+                $position++;
                 continue;
             }
 
             $asset = $record->assets()->updateOrCreate(
                 ['category' => 'gallery_image', 'kind' => 'image', 'disk' => 'public', 'path' => $path],
-                ['storage' => 'local', 'alt_text' => 'Gallery ' . ($index + 1)]
+                ['storage' => 'local', 'alt_text' => 'Gallery ' . $position]
             );
 
             $itemId = $row['id'] ?? null;
@@ -134,14 +136,16 @@ trait SyncInvitationAssets
                 ? $record->galleryItems()->whereKey($itemId)->first()
                 : null;
             $item = $item ?? $record->galleryItems()->create([
-                'sort_order' => $index + 1,
+                'sort_order' => $position,
                 'image_asset_id' => $asset->id,
             ]);
 
             $item->update([
-                'sort_order' => $index + 1,
+                'sort_order' => $position,
                 'image_asset_id' => $asset->id,
             ]);
+
+            $position++;
         }
     }
 
@@ -152,9 +156,11 @@ trait SyncInvitationAssets
             return;
         }
 
-        foreach ($accountRows as $index => $row) {
+        $position = 1;
+        foreach ($accountRows as $row) {
             $path = $this->normalizeUploadPath($row['qr_image'] ?? null);
             if (! $path) {
+                $position++;
                 continue;
             }
 
@@ -165,7 +171,7 @@ trait SyncInvitationAssets
 
             if (! $account) {
                 $account = $record->giftAccounts()->create([
-                    'sort_order' => $index + 1,
+                    'sort_order' => $position,
                 ]);
             }
 
@@ -177,6 +183,8 @@ trait SyncInvitationAssets
             $account->update([
                 'qr_asset_id' => $asset->id,
             ]);
+
+            $position++;
         }
     }
 
