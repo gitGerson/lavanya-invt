@@ -120,16 +120,20 @@ trait SyncInvitationAssets
 
         $position = 1;
         foreach ($galleryRows as $row) {
+            $assetId = $row['image_asset_id'] ?? null;
             $path = $this->normalizeUploadPath($row['image'] ?? null);
-            if (! $path) {
+            if (! $assetId && ! $path) {
                 $position++;
                 continue;
             }
 
-            $asset = $record->assets()->updateOrCreate(
-                ['category' => 'gallery_image', 'kind' => 'image', 'disk' => 'public', 'path' => $path],
-                ['storage' => 'local', 'alt_text' => 'Gallery ' . $position]
-            );
+            if (! $assetId) {
+                $asset = $record->assets()->updateOrCreate(
+                    ['category' => 'gallery_image', 'kind' => 'image', 'disk' => 'public', 'path' => $path],
+                    ['storage' => 'local', 'alt_text' => 'Gallery ' . $position]
+                );
+                $assetId = $asset->id;
+            }
 
             $itemId = $row['id'] ?? null;
             $item = $itemId
@@ -137,12 +141,12 @@ trait SyncInvitationAssets
                 : null;
             $item = $item ?? $record->galleryItems()->create([
                 'sort_order' => $position,
-                'image_asset_id' => $asset->id,
+                'image_asset_id' => $assetId,
             ]);
 
             $item->update([
                 'sort_order' => $position,
-                'image_asset_id' => $asset->id,
+                'image_asset_id' => $assetId,
             ]);
 
             $position++;
