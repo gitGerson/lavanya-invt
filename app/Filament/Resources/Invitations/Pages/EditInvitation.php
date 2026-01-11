@@ -11,6 +11,8 @@ class EditInvitation extends EditRecord
 {
     use SyncInvitationAssets;
 
+    protected array $rawFormState = [];
+
     protected static string $resource = InvitationResource::class;
 
     protected function mutateFormDataBeforeFill(array $data): array
@@ -27,7 +29,8 @@ class EditInvitation extends EditRecord
         $groom = $record->people->firstWhere('role', 'groom');
 
         if ($record->couple?->coupleImage?->storage === 'local') {
-            $data['couple_image'] = $record->couple?->coupleImage?->path;
+            $path = $record->couple?->coupleImage?->path;
+            data_set($data, 'couple.couple_image', $path);
         }
 
         $data['bride_name'] = $bride?->name;
@@ -77,12 +80,14 @@ class EditInvitation extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        $this->rawFormState = $this->form->getRawState();
+
         return $this->stripInvitationFormData($data);
     }
 
     protected function afterSave(): void
     {
-        $this->syncInvitationAssets($this->record, $this->data);
+        $this->syncInvitationAssets($this->record, $this->rawFormState);
     }
 
     protected function getHeaderActions(): array

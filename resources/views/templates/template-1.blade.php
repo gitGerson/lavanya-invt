@@ -14,10 +14,12 @@
     @php
         $bride = $bride ?? $invitation->people->firstWhere('role', 'bride');
         $groom = $groom ?? $invitation->people->firstWhere('role', 'groom');
-        $defaultBg = 'https://api.our-wedding.link/uploads/8cde97a0-cc1d-11ee-8a12-1d71291003ab.jpg';
+        $heroBackground = 'https://api.our-wedding.link/uploads/8cde97a0-cc1d-11ee-8a12-1d71291003ab.jpg';
         $heroImage = $invitation->couple?->coupleImage?->publicUrl()
             ?? $invitation->galleryItems->first()?->image?->publicUrl()
-            ?? $defaultBg;
+            ?? $heroBackground;
+        $coupleImage = $invitation->couple?->coupleImage?->publicUrl()
+            ?? $heroImage;
         $heroTitle = $invitation->title
             ?? trim(($invitation->couple?->couple_name_1 ?? '') . ' & ' . ($invitation->couple?->couple_name_2 ?? ''));
         $heroDescription = $invitation->couple?->wedding_date_display;
@@ -114,7 +116,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url('{{ $heroImage }}');
+            background-image: url('{{ $heroBackground }}');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -405,7 +407,7 @@
             @endif
             <!-- Main Couple Section -->
             <div id="section-couple" class="relative min-h-[100svh] bg-center bg-cover"
-                style="background-image: url('{{ $heroImage }}');">
+                style="background-image: url('{{ $heroBackground }}');">
                 <div
                     class="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#f0e9e6] to-transparent">
                 </div>
@@ -427,8 +429,8 @@
                         <div class="relative overflow-hidden rounded-2xl bg-white/70 shadow-md">
                             <div class="relative aspect-[3/4] w-full">
                                 <img class="absolute inset-0 h-full w-full object-cover"
-                                    src="https://api.our-wedding.link/uploads/6a6ba320-f882-11ee-b17f-470510f0efd9.jpg"
-                                    alt="Main couple frame" />
+                                    src="{{ $coupleImage }}"
+                                    alt="{{ $heroTitle ?: 'Couple photo' }}" />
                             </div>
                         </div>
                         <a class="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
@@ -465,7 +467,7 @@
             </div>
             <!-- Couple Detail Section -->
             <div id="section-details" class="relative min-h-[100svh] bg-center bg-cover px-8 py-12 flex items-center justify-center"
-                style="background-image: url('{{ $heroImage }}');">
+                style="background-image: url('{{ $heroBackground }}');">
                 <div
                     class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0e9e6] to-transparent">
                 </div>
@@ -708,7 +710,7 @@
             </div>
             <!-- Event Section -->
             <div id="section-event" class="min-h-[100svh] bg-center bg-cover px-8 py-12 flex items-center justify-center"
-                style="background-image: url('{{ $heroImage }}');">
+                style="background-image: url('{{ $heroBackground }}');">
                 <div class="w-full max-w-md text-center">
                     <div
                         class="rounded-[28px] border border-white/60 bg-white/50 px-6 py-10 text-amber-900 shadow-[0_12px_30px_rgba(160,120,90,0.2)] backdrop-blur-md">
@@ -761,7 +763,7 @@
             </div>
             <!-- Maps Section -->
             <div id="section-maps" class="relative min-h-[100svh] bg-center bg-cover px-8 py-12 flex items-center justify-center"
-                style="background-image: url('{{ $heroImage }}');">
+                style="background-image: url('{{ $heroBackground }}');">
                 <div class="pointer-events-none absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
                 <div
                     class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0e9e6] to-transparent">
@@ -794,7 +796,7 @@
             <!-- RSVP Section -->
             <div id="section-rsvp" x-data="{ open: false }"
                 class="relative min-h-[100svh] bg-center bg-cover px-8 py-12 flex items-center justify-center"
-                style="background-image: url('{{ $heroImage }}');">
+                style="background-image: url('{{ $heroBackground }}');">
                 <div class="pointer-events-none absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
                 <div
                     class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0e9e6] to-transparent">
@@ -948,7 +950,7 @@
             </div>
             <!-- Wish Section -->
             <div id="section-wish" class="relative min-h-[100svh] bg-center bg-cover px-8 py-12 flex items-center justify-center"
-                style="background-image: url('{{ $heroImage }}');">
+                style="background-image: url('{{ $heroBackground }}');">
                 <div class="pointer-events-none absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
                 <div
                     class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0e9e6] to-transparent">

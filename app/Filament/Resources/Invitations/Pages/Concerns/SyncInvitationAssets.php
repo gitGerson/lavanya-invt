@@ -50,7 +50,20 @@ trait SyncInvitationAssets
 
     protected function syncCoupleImage(Invitation $record, array $data): void
     {
-        $path = $this->normalizeUploadPath($data['couple_image'] ?? null);
+        \Log::info('invitation_couple_image_raw_state', [
+            'couple_image' => data_get($data, 'couple_image'),
+            'couple_couple_image' => data_get($data, 'couple.couple_image'),
+            'couple_keys' => is_array(data_get($data, 'couple')) ? array_keys(data_get($data, 'couple')) : null,
+            'couple_image_type' => is_object(data_get($data, 'couple_image')) ? get_class(data_get($data, 'couple_image')) : gettype(data_get($data, 'couple_image')),
+            'couple_couple_image_type' => is_object(data_get($data, 'couple.couple_image')) ? get_class(data_get($data, 'couple.couple_image')) : gettype(data_get($data, 'couple.couple_image')),
+            'couple_couple_image_count' => is_array(data_get($data, 'couple.couple_image')) ? count(data_get($data, 'couple.couple_image')) : null,
+            'couple_couple_image_first' => is_array(data_get($data, 'couple.couple_image')) ? array_key_first(data_get($data, 'couple.couple_image')) : null,
+        ]);
+
+        $path = $this->normalizeUploadPath(
+            $data['couple_image']
+            ?? data_get($data, 'couple.couple_image')
+        );
         if (! $path) {
             return;
         }
@@ -203,6 +216,10 @@ trait SyncInvitationAssets
     {
         if (is_string($value) && $value !== '') {
             return $value;
+        }
+
+        if (is_object($value)) {
+            return null;
         }
 
         if (is_array($value)) {
