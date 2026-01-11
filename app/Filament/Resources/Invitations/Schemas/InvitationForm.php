@@ -207,12 +207,12 @@ class InvitationForm
                                         ->schema([
                                             Hidden::make('id'),
                                             Hidden::make('image_asset_id')
+                                                ->dehydrated(fn ($state) => filled($state))
                                                 ->afterStateHydrated(function (Hidden $component, $state, $record) {
-                                                    if ($record?->image_asset_id) {
+                                                    if (! $state && $record?->image_asset_id) {
                                                         $component->state($record->image_asset_id);
                                                     }
-                                                })
-                                                ->required(),
+                                                }),
                                             FileUpload::make('image')
                                                 ->label('Image')
                                                 ->disk('public')
@@ -303,8 +303,9 @@ class InvitationForm
                                         ->schema([
                                             Hidden::make('id'),
                                             Hidden::make('qr_asset_id')
+                                                ->dehydrated(fn ($state) => filled($state))
                                                 ->afterStateHydrated(function (Hidden $component, $state, $record) {
-                                                    if (!$state && $record?->qr_asset_id) {
+                                                    if (! $state && $record?->qr_asset_id) {
                                                         $component->state($record->qr_asset_id);
                                                     }
                                                 }),
@@ -379,7 +380,13 @@ class InvitationForm
                                 ->schema([
                                     Toggle::make('autoplay')->default(true),
                                     Toggle::make('loop_audio')->default(true),
-                                    Hidden::make('audio_asset_id'),
+                                    Hidden::make('audio_asset_id')
+                                        ->dehydrated(fn ($state) => filled($state))
+                                        ->afterStateHydrated(function (Hidden $component, $state, $record) {
+                                            if (! $state && $record?->audio_asset_id) {
+                                                $component->state($record->audio_asset_id);
+                                            }
+                                        }),
                                     FileUpload::make('music_audio')
                                         ->label('Audio File')
                                         ->disk('public')
