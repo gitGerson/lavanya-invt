@@ -64,8 +64,8 @@ class InvitationForm
                         ->schema([
                             Section::make('Couple')
                                 ->relationship('couple')
-                                ->mutateRelationshipDataBeforeCreateUsing(fn (array $data) => Arr::except($data, ['couple_image']))
-                                ->mutateRelationshipDataBeforeSaveUsing(fn (array $data) => Arr::except($data, ['couple_image']))
+                                ->mutateRelationshipDataBeforeCreateUsing(fn(array $data) => Arr::except($data, ['couple_image']))
+                                ->mutateRelationshipDataBeforeSaveUsing(fn(array $data) => Arr::except($data, ['couple_image']))
                                 ->schema([
                                     Grid::make(2)->schema([
                                         TextInput::make('couple_tagline')->maxLength(255),
@@ -94,12 +94,12 @@ class InvitationForm
                                             }
 
                                             $path = is_array($state) ? (reset($state) ?: null) : $state;
-                                            if (! $path || ! is_string($path)) {
+                                            if (!$path || !is_string($path)) {
                                                 return;
                                             }
 
                                             $invitationId = $livewire->getRecord()?->id;
-                                            if (! $invitationId) {
+                                            if (!$invitationId) {
                                                 return;
                                             }
 
@@ -123,7 +123,7 @@ class InvitationForm
                                             $set('couple_image_asset_id', $asset->id);
                                         })
                                         ->afterStateHydrated(function (FileUpload $component, $state, $record) {
-                                            if (! $record?->couple_image_asset_id) {
+                                            if (!$record?->couple_image_asset_id) {
                                                 return;
                                             }
 
@@ -202,30 +202,36 @@ class InvitationForm
                                     Repeater::make('galleryItems')
                                         ->relationship()
                                         ->orderColumn('sort_order')
-                                        ->mutateRelationshipDataBeforeCreateUsing(fn (array $data) => Arr::except($data, ['image']))
-                                        ->mutateRelationshipDataBeforeSaveUsing(fn (array $data) => Arr::except($data, ['image']))
+                                        ->mutateRelationshipDataBeforeCreateUsing(fn(array $data) => Arr::except($data, ['image']))
+                                        ->mutateRelationshipDataBeforeSaveUsing(fn(array $data) => Arr::except($data, ['image']))
                                         ->schema([
                                             Hidden::make('id'),
-                                            Hidden::make('image_asset_id'),
+                                            Hidden::make('image_asset_id')
+                                                ->afterStateHydrated(function (Hidden $component, $state, $record) {
+                                                    if ($record?->image_asset_id) {
+                                                        $component->state($record->image_asset_id);
+                                                    }
+                                                })
+                                                ->required(),
                                             FileUpload::make('image')
                                                 ->label('Image')
                                                 ->disk('public')
                                                 ->directory('invitations/gallery')
                                                 ->image()
                                                 ->dehydrated(false)
+                                                ->required(fn (Get $get) => blank($get('id'))) // item baru wajib upload
                                                 ->afterStateUpdated(function ($state, Set $set, Get $get, $livewire) {
                                                     if (blank($state)) {
-                                                        $set('image_asset_id', null);
                                                         return;
                                                     }
 
                                                     $path = is_array($state) ? (reset($state) ?: null) : $state;
-                                                    if (! $path || ! is_string($path)) {
+                                                    if (!$path || !is_string($path)) {
                                                         return;
                                                     }
 
                                                     $invitationId = $livewire->getRecord()?->id;
-                                                    if (! $invitationId) {
+                                                    if (!$invitationId) {
                                                         return;
                                                     }
 
@@ -249,7 +255,7 @@ class InvitationForm
                                                     $set('image_asset_id', $asset->id);
                                                 })
                                                 ->afterStateHydrated(function (FileUpload $component, $state, $record) {
-                                                    if (! $record?->image_asset_id) {
+                                                    if (!$record?->image_asset_id) {
                                                         return;
                                                     }
 
@@ -292,11 +298,16 @@ class InvitationForm
                                     Repeater::make('giftAccounts')
                                         ->relationship()
                                         ->orderColumn('sort_order')
-                                        ->mutateRelationshipDataBeforeCreateUsing(fn (array $data) => Arr::except($data, ['qr_image']))
-                                        ->mutateRelationshipDataBeforeSaveUsing(fn (array $data) => Arr::except($data, ['qr_image']))
+                                        ->mutateRelationshipDataBeforeCreateUsing(fn(array $data) => Arr::except($data, ['qr_image']))
+                                        ->mutateRelationshipDataBeforeSaveUsing(fn(array $data) => Arr::except($data, ['qr_image']))
                                         ->schema([
                                             Hidden::make('id'),
-                                            Hidden::make('qr_asset_id'),
+                                            Hidden::make('qr_asset_id')
+                                                ->afterStateHydrated(function (Hidden $component, $state, $record) {
+                                                    if (!$state && $record?->qr_asset_id) {
+                                                        $component->state($record->qr_asset_id);
+                                                    }
+                                                }),
                                             Grid::make(2)->schema([
                                                 TextInput::make('bank_name')->maxLength(100),
                                                 TextInput::make('account_number')->maxLength(100),
@@ -315,12 +326,12 @@ class InvitationForm
                                                     }
 
                                                     $path = is_array($state) ? (reset($state) ?: null) : $state;
-                                                    if (! $path || ! is_string($path)) {
+                                                    if (!$path || !is_string($path)) {
                                                         return;
                                                     }
 
                                                     $invitationId = $livewire->getRecord()?->id;
-                                                    if (! $invitationId) {
+                                                    if (!$invitationId) {
                                                         return;
                                                     }
 
@@ -344,7 +355,7 @@ class InvitationForm
                                                     $set('qr_asset_id', $asset->id);
                                                 })
                                                 ->afterStateHydrated(function (FileUpload $component, $state, $record) {
-                                                    if (! $record?->qr_asset_id) {
+                                                    if (!$record?->qr_asset_id) {
                                                         return;
                                                     }
 
@@ -363,8 +374,8 @@ class InvitationForm
                         ->schema([
                             Section::make('Music')
                                 ->relationship('music')
-                                ->mutateRelationshipDataBeforeCreateUsing(fn (array $data) => Arr::except($data, ['music_audio']))
-                                ->mutateRelationshipDataBeforeSaveUsing(fn (array $data) => Arr::except($data, ['music_audio']))
+                                ->mutateRelationshipDataBeforeCreateUsing(fn(array $data) => Arr::except($data, ['music_audio']))
+                                ->mutateRelationshipDataBeforeSaveUsing(fn(array $data) => Arr::except($data, ['music_audio']))
                                 ->schema([
                                     Toggle::make('autoplay')->default(true),
                                     Toggle::make('loop_audio')->default(true),
@@ -382,12 +393,12 @@ class InvitationForm
                                             }
 
                                             $path = is_array($state) ? (reset($state) ?: null) : $state;
-                                            if (! $path || ! is_string($path)) {
+                                            if (!$path || !is_string($path)) {
                                                 return;
                                             }
 
                                             $invitationId = $livewire->getRecord()?->id;
-                                            if (! $invitationId) {
+                                            if (!$invitationId) {
                                                 return;
                                             }
 
@@ -411,7 +422,7 @@ class InvitationForm
                                             $set('audio_asset_id', $asset->id);
                                         })
                                         ->afterStateHydrated(function (FileUpload $component, $state, $record) {
-                                            if (! $record?->audio_asset_id) {
+                                            if (!$record?->audio_asset_id) {
                                                 return;
                                             }
 
