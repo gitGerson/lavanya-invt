@@ -230,14 +230,9 @@ class InvitationForm
                                                         return;
                                                     }
 
-                                                    $invitationId = $livewire->getRecord()?->id;
-                                                    if (!$invitationId) {
-                                                        return;
-                                                    }
-
                                                     $asset = Asset::firstOrCreate(
                                                         [
-                                                            'invitation_id' => $invitationId,
+                                                            'invitation_id' => $livewire->getRecord()?->id,
                                                             'storage' => 'local',
                                                             'disk' => 'public',
                                                             'path' => $path,

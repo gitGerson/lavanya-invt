@@ -133,6 +133,11 @@ trait SyncInvitationAssets
                     ['storage' => 'local', 'alt_text' => 'Gallery ' . $position]
                 );
                 $assetId = $asset->id;
+            } else {
+                $asset = $record->assets()->whereKey($assetId)->first();
+                if ($asset && $asset->invitation_id === null) {
+                    $asset->update(['invitation_id' => $record->id]);
+                }
             }
 
             $itemId = $row['id'] ?? null;
