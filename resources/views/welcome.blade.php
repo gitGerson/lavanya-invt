@@ -11,6 +11,7 @@
         @vite(['resources/css/app.css'])
     @endif
 
+    @livewireStyles
     @filamentStyles
 
     {{ filament()->getTheme()->getHtml() }}
@@ -30,7 +31,7 @@
 
         .golden-theme {
             background:
-                linear-gradient(160deg, rgba(255, 247, 225, 0.95) 0%, rgba(255, 243, 211, 0.92) 45%, rgba(251, 240, 207, 0.92) 100%),
+                linear-gradient(160deg, rgba(255, 247, 225, 0.25) 0%, rgba(255, 243, 211, 0.50) 45%, rgba(251, 240, 207, 0.92) 100%),
                 url('{{ asset('bg.png') }}');
             background-size: cover;
             background-position: center;
@@ -52,7 +53,6 @@
         .golden-theme .fi-sc-wizard-header {
             background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(252, 247, 235, 0.98));
             border: 1px solid rgba(212, 175, 55, 0.25);
-            box-shadow: inset 0 0 0 1px rgba(255, 232, 184, 0.2);
             color: #4a3310;
         }
 
@@ -61,12 +61,25 @@
             background: transparent;
         }
 
+        .golden-theme .fi-sc-wizard-header {
+            border: 0;
+            box-shadow: none;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
         .golden-theme .fi-sc-wizard-step > .fi-sc-wizard-step-content,
         .golden-theme .fi-sc-wizard .fi-section,
         .golden-theme .fi-section-content,
         .golden-theme .fi-section-header {
             background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(252, 247, 235, 0.98));
-            border-color: rgba(212, 175, 55, 0.25);
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .golden-theme .fi-sc-wizard-step > .fi-sc-wizard-step-content,
+        .golden-theme .fi-sc-wizard .fi-section {
+            border: 0;
+            box-shadow: none;
         }
 
         .golden-theme .fi-section-header {
@@ -83,6 +96,10 @@
             color: #b98010;
         }
 
+        .golden-theme .fi-sc-wizard-header-step.fi-active {
+            border: 0 !important;
+        }
+
         .golden-theme .fi-sc-wizard-header-step-icon-ctn {
             box-shadow: inset 0 0 0 1px rgba(255, 215, 120, 0.2);
         }
@@ -92,7 +109,27 @@
         .golden-theme .fi-select-input,
         .golden-theme .fi-fo-field-wrp {
             background-color: rgba(255, 255, 255, 0.7);
-            border-color: rgba(212, 175, 55, 0.25);
+        }
+
+        .golden-theme .fi-input-wrp,
+        .golden-theme .fi-fo-field-wrp {
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            box-shadow: inset 0 0 0 1px rgba(255, 236, 190, 0.35);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .golden-theme .fi-input,
+        .golden-theme .fi-select-input {
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .golden-theme .fi-input-wrp:focus-within,
+        .golden-theme .fi-fo-field-wrp:focus-within {
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 236, 190, 0.45),
+                0 0 0 1px rgba(212, 175, 55, 0.35);
         }
 
         .golden-theme .fi-input::placeholder,
@@ -107,6 +144,29 @@
         .golden-theme .fi-fo-field-wrp-label,
         .golden-theme .fi-fo-field-wrp-helper-text {
             color: #4a3310;
+        }
+
+        .golden-theme .fi-select-input option,
+        .golden-theme select option {
+            background-color: #fff8ea;
+            color: #4a3310;
+        }
+
+        .golden-theme .fi-select-input-options-ctn,
+        .golden-theme .fi-select-input-option-group {
+            background-color: #fff8ea !important;
+            border-color: rgba(212, 175, 55, 0.35) !important;
+        }
+
+        .golden-theme .fi-select-input-option {
+            background-color: transparent !important;
+            color: #4a3310 !important;
+        }
+
+        .golden-theme .fi-select-input-option.fi-selected,
+        .golden-theme .fi-select-input-option.fi-focused {
+            background-color: rgba(212, 175, 55, 0.2) !important;
+            color: #4a3310 !important;
         }
 
         .golden-theme .fi-sc-wizard,
@@ -145,6 +205,77 @@
         .golden-theme .fi-btn.fi-color-gray,
         .golden-theme .fi-btn.fi-color-gray :where(*) {
             color: #4a3310 !important;
+        }
+
+        .golden-theme .fi-modal,
+        .golden-theme .fi-modal-window,
+        .golden-theme .fi-modal-content,
+        .golden-theme .fi-modal-header,
+        .golden-theme .fi-modal-footer {
+            background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(252, 247, 235, 0.98)) !important;
+            color: #4a3310 !important;
+            border-color: rgba(212, 175, 55, 0.25) !important;
+        }
+
+        .golden-theme .fi-modal-heading,
+        .golden-theme .fi-modal-description,
+        .golden-theme .fi-modal-body {
+            color: #4a3310 !important;
+        }
+
+        .golden-theme .fi-modal-close-button,
+        .golden-theme .fi-modal-close-button svg {
+            color: #8b650f !important;
+        }
+
+        .golden-theme .fi-sc-wizard,
+        .golden-theme .fi-section,
+        .golden-theme .fi-section-content,
+        .golden-theme .fi-section-header,
+        .golden-theme .fi-input-wrp,
+        .golden-theme .fi-input,
+        .golden-theme .fi-select-input,
+        .golden-theme .fi-fo-field-wrp,
+        .golden-theme .fi-btn,
+        .golden-theme .fi-sc-wizard-header-step,
+        .golden-theme .fi-sc-wizard-header-step-icon-ctn {
+            transition:
+                color 200ms ease,
+                background-color 200ms ease,
+                border-color 200ms ease,
+                box-shadow 200ms ease,
+                transform 200ms ease,
+                opacity 200ms ease;
+        }
+
+        .golden-theme .fi-sc-wizard.wizard-animate[data-direction='next'] {
+            animation: wizard-card-next 650ms ease both;
+        }
+
+        .golden-theme .fi-sc-wizard.wizard-animate[data-direction='prev'] {
+            animation: wizard-card-prev 650ms ease both;
+        }
+
+        @keyframes wizard-card-next {
+            0% {
+                opacity: 0;
+                transform: translateX(24px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes wizard-card-prev {
+            0% {
+                opacity: 0;
+                transform: translateX(-24px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .force-mobile {
@@ -225,6 +356,57 @@
         </div>
     </main>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const setupWizard = (wizardEl) => {
+                if (!wizardEl || wizardEl.dataset.slideBound === 'true') {
+                    return;
+                }
+
+                wizardEl.dataset.slideBound = 'true';
+
+                const getActiveIndex = () => {
+                    const steps = Array.from(wizardEl.querySelectorAll('.fi-sc-wizard-step'));
+                    const activeIndex = steps.findIndex((step) => step.classList.contains('fi-active'));
+                    return { steps, activeIndex };
+                };
+
+                const updateDirection = () => {
+                    const { activeIndex } = getActiveIndex();
+                    const prevIndex = Number(wizardEl.dataset.activeIndex ?? -1);
+
+                if (activeIndex !== -1 && prevIndex !== -1 && activeIndex !== prevIndex) {
+                    wizardEl.dataset.direction = activeIndex > prevIndex ? 'next' : 'prev';
+                    wizardEl.classList.remove('wizard-animate');
+                    void wizardEl.offsetWidth;
+                    wizardEl.classList.add('wizard-animate');
+                }
+
+                    if (activeIndex !== -1) {
+                        wizardEl.dataset.activeIndex = String(activeIndex);
+                    }
+                };
+
+                const { steps } = getActiveIndex();
+                steps.forEach((step) => {
+                    const observer = new MutationObserver(updateDirection);
+                    observer.observe(step, { attributes: true, attributeFilter: ['class'] });
+                });
+
+                updateDirection();
+            };
+
+            document.querySelectorAll('.fi-sc-wizard').forEach(setupWizard);
+
+            const rootObserver = new MutationObserver(() => {
+                document.querySelectorAll('.fi-sc-wizard').forEach(setupWizard);
+            });
+
+            rootObserver.observe(document.body, { childList: true, subtree: true });
+        });
+    </script>
+
+    @livewireScripts
     @filamentScripts(withCore: true)
 </body>
 </html>

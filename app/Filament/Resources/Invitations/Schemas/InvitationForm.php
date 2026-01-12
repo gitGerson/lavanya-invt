@@ -29,37 +29,6 @@ class InvitationForm
         return $schema
             ->components([
                 Wizard::make([
-                    Step::make('Invitation')
-                        ->schema([
-                            Section::make('Invitation')
-                                ->schema([
-                                    Grid::make(['default' => 2, 'lg' => 3])->schema([
-                                        Select::make('template_id')
-                                            ->relationship('template', 'name')
-                                            ->searchable()
-                                            ->required(),
-
-                                        TextInput::make('slug')
-                                            ->required()
-                                            ->unique(ignoreRecord: true)
-                                            ->helperText('Used in the public URL: /inv/{slug}'),
-
-                                        Select::make('status')
-                                            ->options([
-                                                'draft' => 'Draft',
-                                                'published' => 'Published',
-                                                'archived' => 'Archived',
-                                            ])
-                                            ->required(),
-                                    ]),
-
-                                    Grid::make(['default' => 2])->schema([
-                                        TextInput::make('title')->maxLength(200),
-                                        TextInput::make('timezone')->default('Asia/Jakarta')->maxLength(64),
-                                    ]),
-                                ]),
-                        ]),
-
                     Step::make('Couple')
                         ->schema([
                             Section::make('Couple')
@@ -434,6 +403,37 @@ class InvitationForm
                                                 $component->state($asset->path);
                                             }
                                         }),
+                                ]),
+                        ]),
+
+                    Step::make('Invitation')
+                        ->schema([
+                            Section::make('Invitation')
+                                ->schema([
+                                    Grid::make(['default' => 2, 'lg' => 3])->schema([
+                                        Select::make('template_id')
+                                            ->relationship('template', 'name')
+                                            ->searchable()
+                                            ->required(),
+
+                                        TextInput::make('slug')
+                                            ->required()
+                                            ->unique(ignoreRecord: true)
+                                            ->helperText('Used in the public URL: /inv/{slug}'),
+
+                                        Select::make('status')
+                                            ->options([
+                                                'draft' => 'Draft',
+                                                'published' => 'Published',
+                                                'archived' => 'Archived',
+                                            ])
+                                            ->required(),
+                                    ]),
+
+                                    Grid::make(['default' => 2])->schema([
+                                        TextInput::make('title')->maxLength(200),
+                                        TextInput::make('timezone')->default('Asia/Jakarta')->maxLength(64),
+                                    ]),
                                 ]),
                         ]),
                 ])->columnSpanFull(),

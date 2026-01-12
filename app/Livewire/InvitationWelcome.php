@@ -57,6 +57,7 @@ class InvitationWelcome extends Component
 
         session()->regenerate();
         $this->resetAuthInputs();
+        $this->redirect(url('/'), navigate: false);
     }
 
     public function register(): void
@@ -79,6 +80,7 @@ class InvitationWelcome extends Component
         Auth::login($user, remember: true);
         session()->regenerate();
         $this->resetAuthInputs();
+        $this->redirect(url('/'), navigate: false);
     }
 
     public function logout(): void

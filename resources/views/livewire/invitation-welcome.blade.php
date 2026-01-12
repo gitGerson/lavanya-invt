@@ -1,7 +1,6 @@
 <div class="w-full flex flex-col items-center gap-8">
     <div class="flex flex-col items-center gap-4">
-        <img src="{{ asset('logo.jpg') }}" alt="Logo" class="h-16 w-auto drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]" />
-        <div class="text-xs uppercase golden-title">Invitation Builder</div>
+        <img src="{{ asset('logo.jpg') }}" alt="Logo" class="h-24 w-auto drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]" />
     </div>
     @if (auth()->check())
         <div class="w-full flex justify-center">
