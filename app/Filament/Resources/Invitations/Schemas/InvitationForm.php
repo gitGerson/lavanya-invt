@@ -33,7 +33,7 @@ class InvitationForm
                         ->schema([
                             Section::make('Invitation')
                                 ->schema([
-                                    Grid::make(3)->schema([
+                                    Grid::make(['default' => 2, 'lg' => 3])->schema([
                                         Select::make('template_id')
                                             ->relationship('template', 'name')
                                             ->searchable()
@@ -53,7 +53,7 @@ class InvitationForm
                                             ->required(),
                                     ]),
 
-                                    Grid::make(2)->schema([
+                                    Grid::make(['default' => 2])->schema([
                                         TextInput::make('title')->maxLength(200),
                                         TextInput::make('timezone')->default('Asia/Jakarta')->maxLength(64),
                                     ]),
@@ -67,11 +67,11 @@ class InvitationForm
                                 ->mutateRelationshipDataBeforeCreateUsing(fn(array $data) => Arr::except($data, ['couple_image']))
                                 ->mutateRelationshipDataBeforeSaveUsing(fn(array $data) => Arr::except($data, ['couple_image']))
                                 ->schema([
-                                    Grid::make(2)->schema([
+                                    Grid::make(['default' => 2])->schema([
                                         TextInput::make('couple_tagline')->maxLength(255),
                                         TextInput::make('wedding_date_display')->maxLength(150),
                                     ]),
-                                    Grid::make(2)->schema([
+                                    Grid::make(['default' => 2])->schema([
                                         TextInput::make('couple_name_1')->maxLength(150),
                                         TextInput::make('couple_name_2')->maxLength(150),
                                     ]),
@@ -140,7 +140,7 @@ class InvitationForm
                         ->schema([
                             Section::make('Bride & Groom')
                                 ->schema([
-                                    Grid::make(2)->schema([
+                                    Grid::make(['default' => 2])->schema([
                                         Section::make('Bride')
                                             ->schema(self::personFields('bride')),
                                         Section::make('Groom')
@@ -154,7 +154,7 @@ class InvitationForm
                             Section::make('Event Section')
                                 ->relationship('eventSection')
                                 ->schema([
-                                    Grid::make(2)->schema([
+                                    Grid::make(['default' => 2])->schema([
                                         TextInput::make('section_title')->label('Section Title')->maxLength(150),
                                         TextInput::make('default_location_url')->label('Default Location URL'),
                                     ]),
@@ -166,15 +166,15 @@ class InvitationForm
                                         ->relationship()
                                         ->orderColumn('sort_order')
                                         ->schema([
-                                            Grid::make(2)->schema([
+                                            Grid::make(['default' => 2])->schema([
                                                 TextInput::make('title')->required()->maxLength(150),
                                                 TextInput::make('location_text')->label('Location')->maxLength(255),
                                             ]),
-                                            Grid::make(2)->schema([
+                                            Grid::make(['default' => 2])->schema([
                                                 TextInput::make('event_date_display')->label('Date (Display)')->maxLength(150),
                                                 TextInput::make('event_time_display')->label('Time (Display)')->maxLength(150),
                                             ]),
-                                            Grid::make(3)->schema([
+                                            Grid::make(['default' => 2, 'lg' => 3])->schema([
                                                 DatePicker::make('event_date')->label('Date (Normalized)'),
                                                 TimePicker::make('start_time')->seconds(false),
                                                 TimePicker::make('end_time')->seconds(false),
@@ -282,7 +282,7 @@ class InvitationForm
                             Section::make('Gift Section')
                                 ->relationship('giftSection')
                                 ->schema([
-                                    Grid::make(2)->schema([
+                                    Grid::make(['default' => 2])->schema([
                                         TextInput::make('gift_title')->maxLength(150),
                                         TextInput::make('gift_subtitle')->maxLength(255),
                                     ]),
@@ -304,7 +304,7 @@ class InvitationForm
                                                         $component->state($record->qr_asset_id);
                                                     }
                                                 }),
-                                            Grid::make(2)->schema([
+                                            Grid::make(['default' => 2])->schema([
                                                 TextInput::make('bank_name')->maxLength(100),
                                                 TextInput::make('account_number')->maxLength(100),
                                             ]),

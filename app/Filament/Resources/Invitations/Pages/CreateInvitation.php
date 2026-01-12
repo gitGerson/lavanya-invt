@@ -17,6 +17,9 @@ class CreateInvitation extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $this->rawFormState = $this->form->getRawState();
+        if (auth()->check() && empty($data['user_id'])) {
+            $data['user_id'] = auth()->id();
+        }
 
         return $this->stripInvitationFormData($data);
     }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Invitation extends Model
 {
     protected $fillable = [
+        'user_id',
         'template_id',
         'slug',
         'title',
@@ -51,6 +52,11 @@ class Invitation extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(Template::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function assets(): HasMany
